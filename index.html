@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2457d6" />
+    <meta name="description" content="Мобильное расписание школы ЦО" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Расписание" />
+    <title>Расписание ЦО</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/icon-180.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <section id="loading-screen" class="screen centered-screen" aria-live="polite">
+        <div class="brand-mark" aria-hidden="true">Р</div>
+        <div class="loader" aria-hidden="true"></div>
+        <h1>Загружаем расписание</h1>
+        <p>Получаем свежие данные из Google Таблиц.</p>
+      </section>
+
+      <section id="error-screen" class="screen centered-screen" hidden>
+        <div class="state-icon state-icon--error" aria-hidden="true">!</div>
+        <h1>Не удалось загрузить расписание</h1>
+        <p id="error-message">Проверьте подключение к интернету и попробуйте ещё раз.</p>
+        <button id="retry-button" class="primary-button" type="button">Повторить</button>
+      </section>
+
+      <section id="setup-screen" class="screen setup-screen" hidden>
+        <div class="setup-card">
+          <div class="setup-heading">
+            <div class="brand-mark" aria-hidden="true">Р</div>
+            <div>
+              <p class="eyebrow">Школьное расписание</p>
+              <h1 id="setup-title">Настройте приложение</h1>
+            </div>
+          </div>
+
+          <form id="profile-form" novalidate>
+            <label class="field">
+              <span>Школа</span>
+              <select id="school-select" required></select>
+            </label>
+
+            <fieldset class="role-fieldset">
+              <legend>Кто вы?</legend>
+              <div class="segmented-control">
+                <label>
+                  <input type="radio" name="role" value="student" checked />
+                  <span>Ученик</span>
+                </label>
+                <label>
+                  <input type="radio" name="role" value="teacher" />
+                  <span>Учитель</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div id="student-fields" class="form-section">
+              <label class="field">
+                <span>Класс</span>
+                <select id="class-select"></select>
+              </label>
+
+              <label class="check-field">
+                <input id="beneficiary-checkbox" type="checkbox" />
+                <span>
+                  <strong>Я льготник</strong>
+                  <small>Покажем уведомление перед первой большой переменой.</small>
+                </span>
+              </label>
+            </div>
+
+            <div id="teacher-fields" class="form-section" hidden>
+              <label class="field">
+                <span>ФИО учителя</span>
+                <select id="teacher-select"></select>
+              </label>
+            </div>
+
+            <p id="form-error" class="form-error" role="alert" hidden></p>
+
+            <div class="form-actions">
+              <button id="cancel-settings-button" class="secondary-button" type="button" hidden>
+                Отмена
+              </button>
+              <button class="primary-button" type="submit">Сохранить</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="main-screen" class="screen main-screen" hidden>
+        <header class="app-header">
+          <div>
+            <p class="eyebrow">Расписание</p>
+            <h1>ЦО</h1>
+          </div>
+          <button id="settings-button" class="icon-button" type="button" aria-label="Открыть настройки">
+            <span aria-hidden="true">⚙</span>
+          </button>
+        </header>
+
+        <div class="profile-strip">
+          <div class="profile-avatar" aria-hidden="true"></div>
+          <div>
+            <strong id="profile-primary"></strong>
+            <span id="profile-secondary"></span>
+          </div>
+        </div>
+
+        <nav id="day-tabs" class="day-tabs" aria-label="Дни недели"></nav>
+
+        <main>
+          <div class="schedule-heading">
+            <div>
+              <p id="schedule-caption" class="eyebrow"></p>
+              <h2 id="schedule-title"></h2>
+            </div>
+            <span id="lesson-count" class="count-badge"></span>
+          </div>
+
+          <section id="notification-card" class="notification-card" hidden>
+            <div class="notification-icon" aria-hidden="true">◷</div>
+            <div class="notification-copy">
+              <strong id="notification-title"></strong>
+              <p id="notification-text"></p>
+              <button id="notification-button" class="text-button" type="button" hidden>
+                Разрешить уведомления
+              </button>
+            </div>
+          </section>
+
+          <section id="schedule-list" class="schedule-list" aria-live="polite"></section>
+        </main>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
